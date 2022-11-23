@@ -11,13 +11,22 @@ DISPLAY_HEIGHT = 600
 screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
 
-# Player
-player_image = pygame.image.load('icon.png')
-PLAYER_POSTION = np.array([200, 200])
-dPOSITION = np.array([0, 0])
+class Tank:
+    def __init__(self) -> None:
+        self.player_image = pygame.image.load('icon.png')
+        self.POSITION = np.array([200, 200], dtype=np.float32)
+        self.dPOSITION = np.array([0, 0], dtype=np.float32)
 
-def player(position):
-    screen.blit(player_image, position)
+    def move(self):
+        self.POSITION += self.dPOSITION
+        self.dPOSITION = np.array([0, 0], dtype='float32') # Reset back to zero for next frame
+
+        # Convert to integer for pygame drawing
+        integer_position = self.POSITION.astype(int)
+        screen.blit(self.player_image, integer_position)
+
+# Instantiate a tank
+tank = Tank()
 
 # Game loop
 GAME_RUNNING = True
@@ -29,29 +38,15 @@ while GAME_RUNNING:
         if event.type == pygame.QUIT:
             GAME_RUNNING = False
 
-        # # If keystroke pressed, check if left or right
-        # if event.type == pygame.KEYDOWN:
-        #     if event.key == pygame.K_LEFT:
-        #         dPLAYER_X = -0.1 
-        #     if event.key == pygame.K_RIGHT:
-        #         dPLAYER_X = 0.1
-        # # if event.type == pygame.KEYUP:
-        # #     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-        # #         dPLAYER_X = 0
     keys = pygame.key.get_pressed()
     if keys[pygame.K_RIGHT]:
-        dPOSITION[0] = dPOSITION[0] + 0.1
+        tank.dPOSITION[0] += 0.1
     if keys[pygame.K_LEFT]:
-        dPOSITION[0] += -0.1
+        tank.dPOSITION[0] += -0.1
     if keys[pygame.K_UP]:
-        dPOSITION[1] += 0.1
+        tank.dPOSITION[1] += -0.1
     if keys[pygame.K_DOWN]:
-        dPOSITION[1] += -0.1
-    print(dPOSITION[0])
-    PLAYER_POSTION += dPOSITION
+        tank.dPOSITION[1] += 0.1
 
-    player(PLAYER_POSTION)
+    tank.move()
     pygame.display.update()
-
-    dPOSITION = np.array([0,0])
-
