@@ -47,10 +47,12 @@ class Game():
             if keys[pygame.K_DOWN]:
                 self.tank.control(0, +self.tank.tank_speed)
             # Shoot bullet
+            # if keys[pygame.K_f]:
+            #     if self.tank.can_shoot():
+            #         self.bullet_group.add(self.tank.create_bullet())
             if keys[pygame.K_f]:
                 if self.tank.can_shoot():
-                    self.bullet_group.add(self.tank.create_bullet())
-                
+                    self.tank.create_bullet(self.bullet_group)
 
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)

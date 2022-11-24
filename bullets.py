@@ -2,8 +2,8 @@ import pygame
 import constants
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, pos_x: float, pos_y: float) -> None:
-        super().__init__()
+    def __init__(self, pos_x: float, pos_y: float, bullet_group) -> None:
+        super().__init__(bullet_group)
 
         self.image = pygame.Surface([8, 8])
         self.image.fill((0, 0, 0))
