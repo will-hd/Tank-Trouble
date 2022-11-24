@@ -25,7 +25,7 @@ class Game():
         
         self.new_map()
 
-        self.tank = Tank(self.tank_group)
+        self.tank = Tank(self.tank_group, self.wall_group)
 
 
     def run(self):
