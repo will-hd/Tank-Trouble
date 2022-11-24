@@ -18,7 +18,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.bullet_speed
         
-        if self.rect.x >= constants.DISPLAY_WIDTH-100:
+        if self.rect.x >= constants.DISPLAY_WIDTH-10:
             self.kill()
 
     def draw(self):

@@ -3,6 +3,7 @@ import numpy as np
 from tank import Tank
 from bullets import Bullet
 import constants
+import wall
 
 # Initialise pygame 
 pygame.init()
@@ -20,6 +21,9 @@ class Game():
         self.backdrop_box = self.screen.get_rect()
 
         self.tank_group = pygame.sprite.Group()
+        self.wall_group = pygame.sprite.Group()
+        
+        self.new_map()
 
         self.tank = Tank(self.tank_group)
 
@@ -55,7 +59,7 @@ class Game():
 
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)
-            self.draw_grid()
+            self.wall_group.draw(self.screen)
 
             for tank in self.tank_group:
                 self.tank.bullet_group.update()
@@ -66,16 +70,14 @@ class Game():
 
             pygame.display.flip()
             
-
-    def draw_grid(self):
-
+    def new_map(self):
         BLOCKSIZE = 20 #Set the size of the grid block
 
-        for x in range(0, self.display_width, BLOCKSIZE):
-            for y in range(0, self.display_height, BLOCKSIZE):
+        for row, tiles in enumerate(wall.wall_map):
+            for col, tile in enumerate(tiles):
+                if tile == 1:
+                    wall.Wall(self.wall_group, col, row)
 
-                rect = pygame.Rect(x, y, BLOCKSIZE, BLOCKSIZE)
-                pygame.draw.rect(self.screen, constants.BLACK, rect, 1)
 
 if __name__ == '__main__':
     g = Game(

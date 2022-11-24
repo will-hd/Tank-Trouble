@@ -60,4 +60,4 @@ class Tank(pygame.sprite.Sprite):
 
 
     def create_bullet(self):
-        return Bullet(self.pos_x, self.pos_y, self.bullet_group)
+        Bullet(self.pos_x, self.pos_y, self.bullet_group)
