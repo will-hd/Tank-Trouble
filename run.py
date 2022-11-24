@@ -16,6 +16,7 @@ class Game():
         # Create screen
         self.screen = pygame.display.set_mode((self.display_width, self.display_height))
         self.backdrop = pygame.Surface([self.display_width, self.display_height])
+        self.backdrop.fill(constants.WHITE)
         self.backdrop_box = self.screen.get_rect()
 
         self.add_tank()
@@ -33,6 +34,7 @@ class Game():
         GAME_RUNNING = True
 
         while GAME_RUNNING:
+            self.clock.tick(30)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -47,9 +49,11 @@ class Game():
                 self.tank.control(0, -self.tank.tank_speed)
             if keys[pygame.K_DOWN]:
                 self.tank.control(0, +self.tank.tank_speed)
-
+            # Shoot bullet
             if keys[pygame.K_f]:
-                self.bullet_group.add(self.tank.create_bullet())
+                if self.tank.can_shoot():
+                    self.bullet_group.add(self.tank.create_bullet())
+                
 
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)
@@ -61,7 +65,7 @@ class Game():
             self.tank_group.draw(self.screen)
 
             pygame.display.flip()
-            self.clock.tick(30)
+            
 
     def draw_grid(self):
 
@@ -71,7 +75,7 @@ class Game():
             for y in range(0, self.display_height, BLOCKSIZE):
 
                 rect = pygame.Rect(x, y, BLOCKSIZE, BLOCKSIZE)
-                pygame.draw.rect(self.screen, (255, 255, 255), rect, 1)
+                pygame.draw.rect(self.screen, constants.BLACK, rect, 1)
 
 if __name__ == '__main__':
     g = Game(
