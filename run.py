@@ -2,19 +2,20 @@ import pygame
 import numpy as np
 from tank import Tank
 from bullets import Bullet
+import constants
 
 # Initialise pygame 
 pygame.init()
 
 class Game():
-    def __init__(self) -> None:
+    def __init__(self, DISPLAY_WIDTH, DISPLAY_HEIGHT) -> None:
         self.clock = pygame.time.Clock()
 
-        self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT = 1200, 800
+        self.display_width, self.display_height = DISPLAY_WIDTH, DISPLAY_HEIGHT
         
         # Create screen
-        self.screen = pygame.display.set_mode((self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT))
-        self.backdrop = pygame.Surface([self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT])
+        self.screen = pygame.display.set_mode((self.display_width, self.display_height))
+        self.backdrop = pygame.Surface([self.display_width, self.display_height])
         self.backdrop_box = self.screen.get_rect()
 
         self.add_tank()
@@ -66,13 +67,17 @@ class Game():
 
         BLOCKSIZE = 50 #Set the size of the grid block
 
-        for x in range(0, self.DISPLAY_WIDTH, BLOCKSIZE):
-            for y in range(0, self.DISPLAY_HEIGHT, BLOCKSIZE):
+        for x in range(0, self.display_width, BLOCKSIZE):
+            for y in range(0, self.display_height, BLOCKSIZE):
 
                 rect = pygame.Rect(x, y, BLOCKSIZE, BLOCKSIZE)
                 pygame.draw.rect(self.screen, (255, 255, 255), rect, 1)
 
 if __name__ == '__main__':
-    g = Game()
+    g = Game(
+        DISPLAY_WIDTH=constants.DISPLAY_WIDTH,
+        DISPLAY_HEIGHT=constants.DISPLAY_HEIGHT
+        )
+    
     g.run()
 
