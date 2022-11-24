@@ -19,7 +19,6 @@ class Game():
         self.backdrop.fill(constants.WHITE)
         self.backdrop_box = self.screen.get_rect()
 
-        self.bullet_group = pygame.sprite.Group()
         self.tank_group = pygame.sprite.Group()
 
         self.tank = Tank(self.tank_group)
@@ -52,15 +51,19 @@ class Game():
             #         self.bullet_group.add(self.tank.create_bullet())
             if keys[pygame.K_f]:
                 if self.tank.can_shoot():
-                    self.tank.create_bullet(self.bullet_group)
+                    self.tank.create_bullet()
+
 
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)
             self.draw_grid()
 
-            self.bullet_group.update()
+            for tank in self.tank_group:
+                print(tank)
+                self.tank.bullet_group.update()
+                self.tank.bullet_group.draw(self.screen)
+
             self.tank_group.update()
-            self.bullet_group.draw(self.screen)
             self.tank_group.draw(self.screen)
 
             pygame.display.flip()

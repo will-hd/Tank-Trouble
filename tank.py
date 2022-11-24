@@ -24,6 +24,8 @@ class Tank(pygame.sprite.Sprite):
 
         self.last_time = pygame.time.get_ticks()
 
+        self.bullet_group = pygame.sprite.Group()
+
     def control(self, dx, dy):
         self.dx += dx
         self.dy += dy
@@ -57,5 +59,5 @@ class Tank(pygame.sprite.Sprite):
             return False
 
 
-    def create_bullet(self, bullet_group):
-        return Bullet(self.pos_x, self.pos_y, bullet_group)
+    def create_bullet(self):
+        return Bullet(self.pos_x, self.pos_y, self.bullet_group)
