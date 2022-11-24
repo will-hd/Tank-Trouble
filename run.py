@@ -19,14 +19,11 @@ class Game():
         self.backdrop.fill(constants.WHITE)
         self.backdrop_box = self.screen.get_rect()
 
-        self.add_tank()
         self.bullet_group = pygame.sprite.Group()
-    
-    def add_tank(self) -> None:
-        # Instantiate a tank and sprite group
-        self.tank = Tank()
         self.tank_group = pygame.sprite.Group()
-        self.tank_group.add(self.tank)
+
+        self.tank = Tank(self.tank_group)
+
 
     def run(self):
         # Game loop
@@ -69,7 +66,7 @@ class Game():
 
     def draw_grid(self):
 
-        BLOCKSIZE = 50 #Set the size of the grid block
+        BLOCKSIZE = 20 #Set the size of the grid block
 
         for x in range(0, self.display_width, BLOCKSIZE):
             for y in range(0, self.display_height, BLOCKSIZE):

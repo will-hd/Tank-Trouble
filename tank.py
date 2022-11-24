@@ -3,8 +3,8 @@ import numpy as np
 from bullets import Bullet
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, tank_group) -> None:
+        super().__init__(tank_group)
 
         self.image = pygame.Surface([60, 40], pygame.SRCALPHA)
         pygame.draw.rect(self.image, (0, 96, 0), (0, 00, 50, 40))
@@ -50,7 +50,6 @@ class Tank(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
         interval = current_time - self.last_time
         
-
         if interval >= self.shoot_frequency:
             self.last_time = current_time
             return True
@@ -59,6 +58,4 @@ class Tank(pygame.sprite.Sprite):
 
 
     def create_bullet(self):
-        
-
         return Bullet(self.pos_x, self.pos_y)
