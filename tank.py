@@ -1,18 +1,20 @@
 import pygame
 import numpy as np
+from bullets import Bullet
 
 class Tank(pygame.sprite.Sprite):
     def __init__(self) -> None:
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
-        self.image = pygame.Surface([30, 30])
+        self.image = pygame.Surface([20, 20])
         self.image.fill((250, 50, 0))
 
+        self.pos_x, self.pos_y = 20, 20
         self.rect = self.image.get_rect()
-
-        self.X, self.Y = 200, 200
+        
         self.dx, self.dy = 0, 0
-        self.rect.x, self.rect.y = self.X, self.Y 
+
+        self.tank_speed = 3
 
     def control(self, dx, dy):
         self.dx += dx
@@ -23,11 +25,14 @@ class Tank(pygame.sprite.Sprite):
         Update tank's position
         """
         # Update with floating point accuracy
-        self.X += self.dx
-        self.Y += self.dy
+        self.pos_x += self.dx
+        self.pos_y += self.dy
 
-        # Conver to integer
-        self.rect.x = int(self.X)
-        self.rect.y = int(self.Y)
+        # Convert to integer for pygame to use
+        self.rect.centerx = int(self.pos_x)
+        self.rect.centery = int(self.pos_y)
 
         (self.dx, self.dy) = (0, 0) # Reset back to zero for next frame
+    
+    def create_bullet(self):
+        return Bullet(self.pos_x, self.pos_y)
