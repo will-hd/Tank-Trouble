@@ -13,17 +13,20 @@ class Tank(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, (0, 128, 0), (10, 10, 30, 20))
         pygame.draw.rect(self.image, (32, 32, 96), (20, 16, 40, 8))
 
+        self.original_image = self.image.copy()
+        self.original_center = self.original_image.get_rect().center
+
         self.position = vector(20, 20)
         self.rect = self.image.get_rect()
-        
         self.dpos = vector(0, 0)
+        self.angle = 0
+        self.direction = vector(1, 0)
 
         self.tank_speed = 5.11
-
         self.shoot_frequency: int = 300 #/milliseconds
         self.bullet_ready: bool = True
 
-        self.last_time = pygame.time.get_ticks()
+        self.previous_time = pygame.time.get_ticks()
 
         self.bullet_group = pygame.sprite.Group() # Bullet group for each tank
         self.wall_group = wall_group
@@ -31,29 +34,60 @@ class Tank(pygame.sprite.Sprite):
     def control(self, dx, dy):
         self.dpos += vector(dx, dy)
 
-    def update(self):
+    def update(self, keys):
         """
         Update tank's position
         """
-        self.position += self.dpos #floating point
-        self.rect.center = self.position # integer
-        print(self.position, self.rect.center)
+        self.handle_key_press(keys)
+
+        self.direction = vector(1, 0).rotate(-self.angle)
+        self.image, rotation_offset = self.rotate_image()
+
+        self.position += self.dpos # floating point accuracy
+        self.rect.center = self.position - rotation_offset # integer
     
         self.dpos = vector(0, 0) # Reset back to zero for next frame
     
+    def rotate_image(self):
+        rotated_image = pygame.transform.rotate(self.original_image, self.angle)
+        rotated_center = rotated_image.get_rect().center
+
+        rotation_offset = vector(rotated_center[0] - self.original_center[0],
+                                  rotated_center[1] - self.original_center[1])  
+    
+        return rotated_image, rotation_offset
+
+    def handle_key_press(self, keys):
+        if keys[pygame.K_RIGHT]:
+                self.control(self.tank_speed, 0)
+        if keys[pygame.K_LEFT]:
+                self.control(-self.tank_speed, 0)
+        if keys[pygame.K_UP]:
+                self.control(0, -self.tank_speed)
+        if keys[pygame.K_DOWN]:
+                self.control(0, +self.tank_speed)
+        if keys[pygame.K_a]:
+                self.angle += 6
+        if keys[pygame.K_s]:
+                self.angle -= 6
+        # Shoot bullet
+        if keys[pygame.K_f]:
+            if self.can_shoot():
+                self.create_bullet()
+
     def can_shoot(self) -> bool:
         """
-        returns whether the tank is able to shoot given time spacing between last 
+        Returns whether the tank is able to shoot given time spacing between last 
         shot.
         """
         current_time = pygame.time.get_ticks()
-        interval = current_time - self.last_time
+        interval = current_time - self.previous_time
         
         if interval >= self.shoot_frequency:
-            self.last_time = current_time
+            self.previous_time = current_time
             return True
         else:
             return False
 
     def create_bullet(self):
-        Bullet(self.position, self.bullet_group, self.wall_group, direction=vector(1,0))
+        Bullet(self.position, self.bullet_group, self.wall_group, direction=self.direction)

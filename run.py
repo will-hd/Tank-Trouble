@@ -41,21 +41,7 @@ class Game():
                     GAME_RUNNING = False
 
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_RIGHT]:
-                self.tank.control(self.tank.tank_speed, 0)
-            if keys[pygame.K_LEFT]:
-                self.tank.control(-self.tank.tank_speed, 0)
-            if keys[pygame.K_UP]:
-                self.tank.control(0, -self.tank.tank_speed)
-            if keys[pygame.K_DOWN]:
-                self.tank.control(0, +self.tank.tank_speed)
-            # Shoot bullet
-            # if keys[pygame.K_f]:
-            #     if self.tank.can_shoot():
-            #         self.bullet_group.add(self.tank.create_bullet())
-            if keys[pygame.K_f]:
-                if self.tank.can_shoot():
-                    self.tank.create_bullet()
+            
 
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)
@@ -65,7 +51,7 @@ class Game():
                 self.tank.bullet_group.update()
                 self.tank.bullet_group.draw(self.screen)
 
-            self.tank_group.update()
+            self.tank_group.update(keys)
             self.tank_group.draw(self.screen)
 
             pygame.display.flip()
