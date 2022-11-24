@@ -17,14 +17,14 @@ class Tank(pygame.sprite.Sprite):
         
         self.dx, self.dy = 0, 0
 
-        self.tank_speed = 3
+        self.tank_speed = 5
 
         self.shoot_frequency: int = 300 #/milliseconds
         self.bullet_ready: bool = True
 
         self.last_time = pygame.time.get_ticks()
 
-        self.bullet_group = pygame.sprite.Group()
+        self.bullet_group = pygame.sprite.Group() # Bullet group for each tank
 
     def control(self, dx, dy):
         self.dx += dx

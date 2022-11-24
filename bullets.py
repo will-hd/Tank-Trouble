@@ -13,8 +13,10 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(center = (int(pos_x), int(pos_y)))
 
+        self.bullet_speed = 8
+
     def update(self):
-        self.rect.x += 5
+        self.rect.x += self.bullet_speed
         
         if self.rect.x >= constants.DISPLAY_WIDTH-100:
             self.kill()

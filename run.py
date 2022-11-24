@@ -53,13 +53,11 @@ class Game():
                 if self.tank.can_shoot():
                     self.tank.create_bullet()
 
-
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)
             self.draw_grid()
 
             for tank in self.tank_group:
-                print(tank)
                 self.tank.bullet_group.update()
                 self.tank.bullet_group.draw(self.screen)
 
