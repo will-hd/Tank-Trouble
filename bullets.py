@@ -30,7 +30,23 @@ class Bullet(pygame.sprite.Sprite):
         Move the bullet
         """
         if pygame.sprite.spritecollide(self, self.walls, False, False):
-            self.direction *= -1
+            if self.direction.y > 0 and self.direction.x == 0:
+                self.direction *= -1
+            elif self.direction.y < 0 and self.direction.x == 0:
+                self.direction *= -1
+            elif self.direction.x > 0 and self.direction.y == 0:
+                self.direction *= -1
+            elif self.direction.x < 0 and self.direction.y == 0:
+                self.direction *= -1
+            elif self.direction.x > 0 and self.direction.y < 0:
+                self.direction.x = -self.direction.x
+            elif self.direction.x < 0 and self.direction.y < 0:
+                self.direction.y = -self.direction.y
+            elif self.direction.x < 0 and self.direction.y > 0:
+                self.direction.x = -self.direction.x
+            elif self.direction.x > 0 and self.direction.y > 0:
+                self.direction.y = -self.direction.y
+                
             self.position += self.direction * self.bullet_speed
         else:
             self.position += self.direction * self.bullet_speed
