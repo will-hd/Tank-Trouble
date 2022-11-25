@@ -19,10 +19,13 @@ class Bullet(pygame.sprite.Sprite):
 
         self.position = position.copy()
         self.rect = self.image.get_rect(center=self.position)
-
-        self.bullet_speed = 8
         self.direction = direction
 
+        self.bullet_speed = 6
+        self.lifetime = 8000 # milliseconds
+
+        self.spawn_time = pygame.time.get_ticks()
+        
         self.walls = wall_group
 
     def update(self):
@@ -46,13 +49,13 @@ class Bullet(pygame.sprite.Sprite):
                 self.direction.x = -self.direction.x
             elif self.direction.x > 0 and self.direction.y > 0:
                 self.direction.y = -self.direction.y
-                
             self.position += self.direction * self.bullet_speed
+
         else:
             self.position += self.direction * self.bullet_speed
         self.rect.center = self.position
 
-        if self.rect.x >= constants.DISPLAY_WIDTH-10:
+        if pygame.time.get_ticks() - self.spawn_time >= self.lifetime:
             self.kill()
 
     def draw(self):

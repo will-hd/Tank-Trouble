@@ -22,9 +22,10 @@ class Tank(pygame.sprite.Sprite):
         self.angle = 0
         self.direction = vector(1, 0)
 
-        self.tank_speed = 5.11
+        self.tank_speed = 4
         self.shoot_frequency: int = 300 #/milliseconds
         self.bullet_ready: bool = True
+        self.max_bullets = 5
 
         self.previous_time = pygame.time.get_ticks()
 
@@ -59,9 +60,9 @@ class Tank(pygame.sprite.Sprite):
 
     def handle_key_press(self, keys):
         if keys[pygame.K_RIGHT]:
-                self.angle += 6
-        if keys[pygame.K_LEFT]:
                 self.angle -= 6
+        if keys[pygame.K_LEFT]:
+                self.angle += 6
         if keys[pygame.K_UP]:
                 self.control(forward=+1)
         if keys[pygame.K_DOWN]:
@@ -79,8 +80,8 @@ class Tank(pygame.sprite.Sprite):
         """
         current_time = pygame.time.get_ticks()
         interval = current_time - self.previous_time
-        
-        if interval >= self.shoot_frequency:
+       
+        if interval >= self.shoot_frequency and len(self.bullet_group) < self.max_bullets:
             self.previous_time = current_time
             return True
         else:

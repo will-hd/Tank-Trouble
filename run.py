@@ -34,7 +34,7 @@ class Game():
         GAME_RUNNING = True
 
         while GAME_RUNNING:
-            self.clock.tick(30)
+            self.clock.tick(40)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
