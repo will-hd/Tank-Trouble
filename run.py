@@ -29,10 +29,12 @@ class Game():
         self.tank1 = Tank(self, PLAYER_ID=0)
         self.tank2 = Tank(self, PLAYER_ID=1)
 
+        self.tanks_dead = [False, False]
+
 
     def run(self):
         # Game loop
-
+        
         GAME_RUNNING = True
 
         while GAME_RUNNING:
@@ -56,8 +58,8 @@ class Game():
             self.tank_group.update(keys)
             self.tank_group.draw(self.screen)
 
-            for tank in self.tank_group:
-                pygame.draw.rect(self.screen, (0, 0, 0), (*tank.rect.topleft, *tank.image.get_size()), 1)
+            # for tank in self.tank_group:
+            #     pygame.draw.rect(self.screen, (0, 0, 0), (*tank.rect.topleft, *tank.image.get_size()), 1)
 
             pygame.display.flip()
             
@@ -66,6 +68,18 @@ class Game():
             for col, tile in enumerate(tiles):
                 if tile == 1:
                     wall.Wall(self.wall_group, col, row)
+    
+    def end_screen(self):
+        END_RUNNING = True
+
+        while END_RUNNING:
+            pygame.time.delay(100)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    END_RUNNING = False
+            
+            font = pygame.font.SysFont('comicsans', 80)
+            score = font.render(f'Winner' )
 
 
 if __name__ == '__main__':

@@ -12,7 +12,10 @@ class Tank(pygame.sprite.Sprite):
         super().__init__(self.game.tank_group)
         self.tanks_bullet_group = pygame.sprite.Group()
 
-        self.position = vector(constants.DISPLAY_WIDTH/2, constants.DISPLAY_HEIGHT/2)
+        if self.PLAYER_ID == 0:
+            self.position = vector(constants.DISPLAY_WIDTH/2, constants.DISPLAY_HEIGHT/2)
+        else:
+            self.position = vector(600, 100)
         self.init_image()
 
         self.dpos = vector(0, 0)

@@ -15,7 +15,7 @@ TANK_COLORS = [
 
 MOVEMENT_KEYS = {
     0: {'CLOCKWISE': pygame.K_RIGHT, 'ANTI-CLOCKWISE': pygame.K_LEFT, 
-        'FORWARD': pygame.K_UP, 'BACKWARD': pygame.K_DOWN, 'SHOOT': pygame.K_SPACE},
+        'FORWARD': pygame.K_UP, 'BACKWARD': pygame.K_DOWN, 'SHOOT': pygame.K_l},
     1: {'CLOCKWISE': pygame.K_d, 'ANTI-CLOCKWISE': pygame.K_a, 
         'FORWARD': pygame.K_w, 'BACKWARD': pygame.K_s, 'SHOOT': pygame.K_f}
         }

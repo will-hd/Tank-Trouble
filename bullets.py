@@ -64,10 +64,15 @@ class Bullet(pygame.sprite.Sprite):
         # Then check if rects collide before mask for better efficiency
         if current_time - self.spawn_time >= 180:
             if pygame.sprite.spritecollide(self, self.game.tank_group, False, pygame.sprite.collide_rect):
-                if pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_mask):
-                    self.kill() # Kill bullet as well as tank
+                # Now check if bullet collides with tank's mask
+                tank_hit_list = pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_mask)
                 
-        # BUllet has finite lifetime
+                if tank_hit_list:
+                    self.kill() # Kill bullet as well as tank
+                    for tank in tank_hit_list: # do we really need to iterate over list?
+                        self.game.tanks_dead[tank.PLAYER_ID] = True
+                
+        # Bullet has finite lifetime
         if current_time - self.spawn_time >= self.lifetime:
             self.kill()
 
