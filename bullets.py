@@ -5,9 +5,10 @@ import constants
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, 
                 position, 
-                bullet_group, 
-                wall_group,
+                bullet_group,
+                game,
                 direction) -> None:
+        self.game = game
         super().__init__(bullet_group)
 
         # Surface, image, rect
@@ -15,18 +16,16 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill((0, 0, 0))
         self.image.set_colorkey((0, 0, 0))
         pygame.draw.circle(self.image, constants.BULLET_COLOR, (4, 4), radius=4)
-        # self.image = pygame.image.load("bullet.png")
 
         self.direction = direction
-        self.position = position.copy() + self.direction*6
+        self.position = position.copy() + self.direction*6 # Bullet spawned closer to end of barrel
         self.rect = self.image.get_rect(center=self.position)
         
 
-        self.bullet_speed = 5
+        self.bullet_speed = 7
         self.lifetime = 8000 # milliseconds
         self.spawn_time = pygame.time.get_ticks()
         
-        self.walls = wall_group
         self.frame = 0
 
     def update(self):
@@ -44,20 +43,25 @@ class Bullet(pygame.sprite.Sprite):
 
         # Do x
         self.rect.centerx = self.position.x
-        if pygame.sprite.spritecollide(self, self.walls, False):
+        if pygame.sprite.spritecollide(self, self.game.wall_group, False):
             self.direction.x *= -1
             self.position = self.position_before_collision
             self.rect.center = self.position
         
         # Do y
         self.rect.centery = self.position.y
-        if pygame.sprite.spritecollide(self, self.walls, False):
+        if pygame.sprite.spritecollide(self, self.game.wall_group, False):
             self.direction.y *= -1
             print(self.direction)
             self.position = self.position_before_collision
             self.rect.center = self.position
-            
-        if pygame.time.get_ticks() - self.spawn_time >= self.lifetime:
+        
+        current_time = pygame.time.get_ticks()
+
+        if current_time - self.spawn_time >= 200:
+            pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_rect)
+
+        if current_time - self.spawn_time >= self.lifetime:
             self.kill()
 
     def draw(self):

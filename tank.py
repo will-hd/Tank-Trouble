@@ -6,8 +6,10 @@ import constants
 vector = pygame.math.Vector2
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, tank_group, wall_group) -> None:
-        super().__init__(tank_group)
+    def __init__(self, game) -> None:
+        self.game = game
+        super().__init__(self.game.tank_group)
+        self.bullet_group = pygame.sprite.Group() # Bullet group for each tank
 
         self.image = pygame.Surface([40, 30], pygame.SRCALPHA)
         pygame.draw.rect(self.image, (0, 96, 0), (0, 0, 30, 30)) # Tank body
@@ -36,9 +38,7 @@ class Tank(pygame.sprite.Sprite):
         self.max_bullets = 5
 
         self.previous_time = pygame.time.get_ticks()
-
-        self.bullet_group = pygame.sprite.Group() # Bullet group for each tank
-        self.wall_group = wall_group
+    
 
     def update(self, keys):
         """
@@ -58,15 +58,16 @@ class Tank(pygame.sprite.Sprite):
         
         # Check if rect collides, then check if mask collides. Hence, we are only
         # checking mask (intesive) if sprite is already close to walls
-        if pygame.sprite.spritecollide(self, self.wall_group, False, pygame.sprite.collide_rect):
-            if pygame.sprite.spritecollide(self, self.wall_group, False, pygame.sprite.collide_mask):
+        if pygame.sprite.spritecollide(self, self.game.wall_group, False, pygame.sprite.collide_rect):
+            if pygame.sprite.spritecollide(self, self.game.wall_group, False, pygame.sprite.collide_mask):
                 # Reset sprite to state before collision
                 self.angle = self.angle_before_collide
                 self.direction = vector(1, 0).rotate(-self.angle)
                 self.image, self.rect, self.mask = self.rotate_image()
 
                 self.position = self.position_before_collide.copy()
-                self.rect.center = self.position 
+                self.rect.center = self.position
+        
         
         self.dpos = vector(0, 0) # Reset back to zero for next frame
 
@@ -111,4 +112,4 @@ class Tank(pygame.sprite.Sprite):
             return False
 
     def create_bullet(self):
-        Bullet(self.position, self.bullet_group, self.wall_group, direction=self.direction)
+        Bullet(self.position, self.bullet_group, self.game, direction=self.direction)
