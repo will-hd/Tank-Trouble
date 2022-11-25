@@ -9,10 +9,10 @@ class Tank(pygame.sprite.Sprite):
     def __init__(self, tank_group, wall_group) -> None:
         super().__init__(tank_group)
 
-        self.image = pygame.Surface([60, 40], pygame.SRCALPHA)
-        pygame.draw.rect(self.image, (0, 96, 0), (0, 00, 50, 40))
-        pygame.draw.rect(self.image, (0, 128, 0), (10, 10, 30, 20))
-        pygame.draw.rect(self.image, (32, 32, 96), (20, 16, 40, 8))
+        self.image = pygame.Surface([40, 30], pygame.SRCALPHA)
+        pygame.draw.rect(self.image, (0, 96, 0), (0, 0, 30, 30)) # Tank body
+        pygame.draw.rect(self.image, (0, 128, 0), (10, 10, 20, 10)) # Tank turret
+        pygame.draw.rect(self.image, (32, 32, 96), (15, 12, 25, 6)) # Tank barrel
         
         self.mask = pygame.mask.from_surface(self.image)
 
