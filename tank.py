@@ -31,8 +31,8 @@ class Tank(pygame.sprite.Sprite):
         self.bullet_group = pygame.sprite.Group() # Bullet group for each tank
         self.wall_group = wall_group
 
-    def control(self, dx, dy):
-        self.dpos += vector(dx, dy)
+    def control(self, forward):
+        self.dpos += self.direction * self.tank_speed * forward
 
     def update(self, keys):
         """
@@ -59,17 +59,14 @@ class Tank(pygame.sprite.Sprite):
 
     def handle_key_press(self, keys):
         if keys[pygame.K_RIGHT]:
-                self.control(self.tank_speed, 0)
-        if keys[pygame.K_LEFT]:
-                self.control(-self.tank_speed, 0)
-        if keys[pygame.K_UP]:
-                self.control(0, -self.tank_speed)
-        if keys[pygame.K_DOWN]:
-                self.control(0, +self.tank_speed)
-        if keys[pygame.K_a]:
                 self.angle += 6
-        if keys[pygame.K_s]:
+        if keys[pygame.K_LEFT]:
                 self.angle -= 6
+        if keys[pygame.K_UP]:
+                self.control(forward=+1)
+        if keys[pygame.K_DOWN]:
+                self.control(forward=-1)
+
         # Shoot bullet
         if keys[pygame.K_f]:
             if self.can_shoot():
