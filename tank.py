@@ -13,7 +13,7 @@ class Tank(pygame.sprite.Sprite):
         self.tanks_bullet_group = pygame.sprite.Group()
 
         if self.PLAYER_ID == 0:
-            self.position = vector(constants.DISPLAY_WIDTH/2, constants.DISPLAY_HEIGHT/2)
+            self.position = vector(constants.DISPLAY_WIDTH/2, constants.DISPLAY_HEIGHT/2 +100)
         else:
             self.position = vector(600, 100)
         self.init_image()
@@ -28,6 +28,7 @@ class Tank(pygame.sprite.Sprite):
         self.bullet_ready: bool = True
         self.max_bullets = 5
 
+        self.IS_ALIVE = True
         self.previous_time = pygame.time.get_ticks()
     
     def init_image(self):

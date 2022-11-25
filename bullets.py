@@ -70,7 +70,7 @@ class Bullet(pygame.sprite.Sprite):
                 if tank_hit_list:
                     self.kill() # Kill bullet as well as tank
                     for tank in tank_hit_list: # do we really need to iterate over list?
-                        self.game.tanks_dead[tank.PLAYER_ID] = True
+                        tank.IS_ALIVE = False
                 
         # Bullet has finite lifetime
         if current_time - self.spawn_time >= self.lifetime:
