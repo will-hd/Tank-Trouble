@@ -29,7 +29,6 @@ class Tank(pygame.sprite.Sprite):
         self.angle = 0
         self.direction = vector(1, 0)
         self.rotation_offset = 0
-        self.COLLIDED = False
 
         self.tank_speed = 4
         self.shoot_frequency: int = 300 #/milliseconds
@@ -51,39 +50,33 @@ class Tank(pygame.sprite.Sprite):
         self.handle_key_press(keys)
 
         self.direction = vector(1, 0).rotate(-self.angle)
-        self.image, self.rect, self.mask, self.rotation_offset = self.rotate_image()
+        self.image, self.rect, self.mask = self.rotate_image()
 
         # Update position
         self.position += self.dpos # floating point accuracy
         self.rect.center = self.position # integer
         
+        # Check if rect collides, then check if mask collides. Hence, we are only
+        # checking mask (intesive) if sprite is already close to walls
         if pygame.sprite.spritecollide(self, self.wall_group, False, pygame.sprite.collide_rect):
-            if pygame.sprite.spritecollide(self, self.wall_group, False, pygame.sprite.collide_rect):
-                self.COLLIDED = True
-                print("collision")
-            
+            if pygame.sprite.spritecollide(self, self.wall_group, False, pygame.sprite.collide_mask):
+                # Reset sprite to state before collision
                 self.angle = self.angle_before_collide
                 self.direction = vector(1, 0).rotate(-self.angle)
-                self.image, self.rect, self.mask, self.rotation_offset = self.rotate_image()
+                self.image, self.rect, self.mask = self.rotate_image()
 
                 self.position = self.position_before_collide.copy()
                 self.rect.center = self.position 
-        
         
         self.dpos = vector(0, 0) # Reset back to zero for next frame
 
     
     def rotate_image(self):
         rotated_image = pygame.transform.rotate(self.original_image, self.angle)
-        rotated_center = rotated_image.get_rect().center
-
-        rotation_offset = vector(rotated_center[0] - self.original_center[0],
-                                  rotated_center[1] - self.original_center[1])  
-
         new_rect = rotated_image.get_rect()
         new_mask = pygame.mask.from_surface(rotated_image)
-        
-        return rotated_image, new_rect, new_mask, rotation_offset
+
+        return rotated_image, new_rect, new_mask
 
     def control(self, forward):
         self.dpos += self.direction * self.tank_speed * forward
