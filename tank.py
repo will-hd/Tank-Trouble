@@ -6,26 +6,14 @@ import constants
 vector = pygame.math.Vector2
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, game) -> None:
+    def __init__(self, game, PLAYER_ID) -> None:
         self.game = game
+        self.PLAYER_ID = PLAYER_ID
         super().__init__(self.game.tank_group)
         self.tanks_bullet_group = pygame.sprite.Group()
 
-        self.image = pygame.Surface([40, 30], pygame.SRCALPHA)
-        pygame.draw.rect(self.image, (0, 96, 0), (0, 0, 30, 30)) # Tank body
-        pygame.draw.rect(self.image, (0, 128, 0), (10, 10, 20, 10)) # Tank turret
-        pygame.draw.rect(self.image, (32, 32, 96), (15, 12, 25, 6)) # Tank barrel
-        
-        self.mask = pygame.mask.from_surface(self.image)
-
-        self.original_image = self.image.copy()
-        self.original_center = self.original_image.get_rect().center
-
         self.position = vector(constants.DISPLAY_WIDTH/2, constants.DISPLAY_HEIGHT/2)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.position
-
-        pygame.draw.rect(self.image, (250, 0, 0), (*self.rect.topleft, *self.image.get_size()),2)
+        self.init_image()
 
         self.dpos = vector(0, 0)
         self.angle = 0
@@ -39,6 +27,24 @@ class Tank(pygame.sprite.Sprite):
 
         self.previous_time = pygame.time.get_ticks()
     
+    def init_image(self):
+        """
+        Create tank image and center at position. Store original image for use
+        in rotations
+        """
+        self.image = pygame.Surface([40, 30], pygame.SRCALPHA)
+        pygame.draw.rect(self.image, (0, 96, 0), (0, 0, 30, 30)) # Tank body
+        pygame.draw.rect(self.image, (0, 128, 0), (10, 10, 20, 10)) # Tank turret
+        pygame.draw.rect(self.image, (32, 32, 96), (15, 12, 25, 6)) # Tank barrel
+        
+        self.mask = pygame.mask.from_surface(self.image)
+
+        self.original_image = self.image.copy()
+        self.original_center = self.original_image.get_rect().center
+        
+        self.rect = self.image.get_rect()
+        self.rect.center = self.position
+        
 
     def update(self, keys):
         """
@@ -83,19 +89,35 @@ class Tank(pygame.sprite.Sprite):
         self.dpos += self.direction * self.tank_speed * forward
 
     def handle_key_press(self, keys):
-        if keys[pygame.K_RIGHT]:
-                self.angle -= 6
-        if keys[pygame.K_LEFT]:
-                self.angle += 6
-        if keys[pygame.K_UP]:
-                self.control(forward=+1)
-        if keys[pygame.K_DOWN]:
-                self.control(forward=-1)
+        if self.PLAYER_ID == 1:
+            if keys[pygame.K_RIGHT]:
+                    self.angle -= 6
+            if keys[pygame.K_LEFT]:
+                    self.angle += 6
+            if keys[pygame.K_UP]:
+                    self.control(forward=+1)
+            if keys[pygame.K_DOWN]:
+                    self.control(forward=-1)
 
-        # Shoot bullet
-        if keys[pygame.K_f]:
-            if self.can_shoot():
-                self.create_bullet()
+            # Shoot bullet
+            if keys[pygame.K_SPACE]:
+                if self.can_shoot():
+                    self.create_bullet()
+        
+        if self.PLAYER_ID == 2:
+            if keys[pygame.K_d]:
+                    self.angle -= 6
+            if keys[pygame.K_a]:
+                    self.angle += 6
+            if keys[pygame.K_w]:
+                    self.control(forward=+1)
+            if keys[pygame.K_s]:
+                    self.control(forward=-1)
+
+            # Shoot bullet
+            if keys[pygame.K_f]:
+                if self.can_shoot():
+                    self.create_bullet()
 
     def can_shoot(self) -> bool:
         """

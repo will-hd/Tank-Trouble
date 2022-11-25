@@ -24,9 +24,10 @@ class Game():
         self.wall_group = pygame.sprite.Group()
         self.all_bullet_group = pygame.sprite.Group()
         
-        self.new_map()
+        self.create_map()
 
-        self.tank = Tank(self)
+        self.tank1 = Tank(self, PLAYER_ID=1)
+        self.tank2 = Tank(self, PLAYER_ID=2)
 
 
     def run(self):
@@ -55,11 +56,12 @@ class Game():
             self.tank_group.update(keys)
             self.tank_group.draw(self.screen)
 
-            pygame.draw.rect(self.screen, (0, 0, 0), (*self.tank.rect.topleft, *self.tank.image.get_size()), 1)
+            for tank in self.tank_group:
+                pygame.draw.rect(self.screen, (0, 0, 0), (*tank.rect.topleft, *tank.image.get_size()), 1)
 
             pygame.display.flip()
             
-    def new_map(self):
+    def create_map(self):
         for row, tiles in enumerate(wall.wall_map):
             for col, tile in enumerate(tiles):
                 if tile == 1:
