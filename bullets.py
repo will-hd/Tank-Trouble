@@ -23,7 +23,6 @@ class Bullet(pygame.sprite.Sprite):
 
         self.bullet_speed = 6
         self.lifetime = 8000 # milliseconds
-
         self.spawn_time = pygame.time.get_ticks()
         
         self.walls = wall_group
@@ -32,7 +31,7 @@ class Bullet(pygame.sprite.Sprite):
         """
         Move the bullet
         """
-        if pygame.sprite.spritecollide(self, self.walls, False, False):
+        if pygame.sprite.spritecollide(self, self.walls, False):
             if self.direction.y > 0 and self.direction.x == 0:
                 self.direction *= -1
             elif self.direction.y < 0 and self.direction.x == 0:
