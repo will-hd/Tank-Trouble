@@ -22,6 +22,7 @@ class Game():
 
         self.tank_group = pygame.sprite.Group()
         self.wall_group = pygame.sprite.Group()
+        self.all_bullet_group = pygame.sprite.Group()
         
         self.new_map()
 
@@ -47,9 +48,9 @@ class Game():
             self.screen.blit(self.backdrop, self.backdrop_box)
             self.wall_group.draw(self.screen)
 
-            for tank in self.tank_group:
-                self.tank.bullet_group.update()
-                self.tank.bullet_group.draw(self.screen)
+            
+            self.all_bullet_group.update()
+            self.all_bullet_group.draw(self.screen)
 
             self.tank_group.update(keys)
             self.tank_group.draw(self.screen)

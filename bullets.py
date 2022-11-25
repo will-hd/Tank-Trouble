@@ -5,11 +5,11 @@ import constants
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, 
                 position, 
-                bullet_group,
                 game,
+                tanks_bullet_group,
                 direction) -> None:
         self.game = game
-        super().__init__(bullet_group)
+        super().__init__(self.game.all_bullet_group, tanks_bullet_group)
 
         # Surface, image, rect
         self.image = pygame.Surface([8, 8])
@@ -58,8 +58,13 @@ class Bullet(pygame.sprite.Sprite):
         
         current_time = pygame.time.get_ticks()
 
+        # Allow delay time so that bullet can leave the tank's rect.
+        # Then check if rects collide before mask for better efficiency
         if current_time - self.spawn_time >= 200:
-            pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_rect)
+            if pygame.sprite.spritecollide(self, self.game.tank_group, False, pygame.sprite.collide_rect):
+                if pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_mask):
+                    self.kill() # Kill bullet as well as tank
+                
 
         if current_time - self.spawn_time >= self.lifetime:
             self.kill()

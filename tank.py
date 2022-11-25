@@ -9,7 +9,7 @@ class Tank(pygame.sprite.Sprite):
     def __init__(self, game) -> None:
         self.game = game
         super().__init__(self.game.tank_group)
-        self.bullet_group = pygame.sprite.Group() # Bullet group for each tank
+        self.tanks_bullet_group = pygame.sprite.Group()
 
         self.image = pygame.Surface([40, 30], pygame.SRCALPHA)
         pygame.draw.rect(self.image, (0, 96, 0), (0, 0, 30, 30)) # Tank body
@@ -105,11 +105,11 @@ class Tank(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
         interval = current_time - self.previous_time
        
-        if interval >= self.shoot_frequency and len(self.bullet_group) < self.max_bullets:
+        if interval >= self.shoot_frequency and len(self.tanks_bullet_group) < self.max_bullets:
             self.previous_time = current_time
             return True
         else:
             return False
 
     def create_bullet(self):
-        Bullet(self.position, self.bullet_group, self.game, direction=self.direction)
+        Bullet(self.position, self.game, self.tanks_bullet_group, direction=self.direction)
