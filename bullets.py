@@ -17,9 +17,10 @@ class Bullet(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, constants.BULLET_COLOR, (4, 4), radius=4)
         # self.image = pygame.image.load("bullet.png")
 
-        self.position = position.copy()
-        self.rect = self.image.get_rect(center=self.position)
         self.direction = direction
+        self.position = position.copy() + self.direction*6
+        self.rect = self.image.get_rect(center=self.position)
+        
 
         self.bullet_speed = 5
         self.lifetime = 8000 # milliseconds
