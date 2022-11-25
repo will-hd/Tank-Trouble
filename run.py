@@ -26,8 +26,8 @@ class Game():
         
         self.create_map()
 
-        self.tank1 = Tank(self, PLAYER_ID=1)
-        self.tank2 = Tank(self, PLAYER_ID=2)
+        self.tank1 = Tank(self, PLAYER_ID=0)
+        self.tank2 = Tank(self, PLAYER_ID=1)
 
 
     def run(self):

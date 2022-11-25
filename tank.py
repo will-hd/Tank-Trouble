@@ -33,9 +33,12 @@ class Tank(pygame.sprite.Sprite):
         in rotations
         """
         self.image = pygame.Surface([40, 30], pygame.SRCALPHA)
-        pygame.draw.rect(self.image, (0, 96, 0), (0, 0, 30, 30)) # Tank body
-        pygame.draw.rect(self.image, (0, 128, 0), (10, 10, 20, 10)) # Tank turret
-        pygame.draw.rect(self.image, (32, 32, 96), (15, 12, 25, 6)) # Tank barrel
+        # Tank body
+        pygame.draw.rect(self.image, constants.TANK_COLORS[self.PLAYER_ID][0], (0, 0, 30, 30))
+        # Tank turret
+        pygame.draw.rect(self.image, constants.TANK_COLORS[self.PLAYER_ID][1], (10, 10, 20, 10))
+        # Tank barrel
+        pygame.draw.rect(self.image, constants.TANK_COLORS[self.PLAYER_ID][2], (15, 12, 25, 6))
         
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -89,7 +92,7 @@ class Tank(pygame.sprite.Sprite):
         self.dpos += self.direction * self.tank_speed * forward
 
     def handle_key_press(self, keys):
-        if self.PLAYER_ID == 1:
+        if self.PLAYER_ID == 0:
             if keys[pygame.K_RIGHT]:
                     self.angle -= 6
             if keys[pygame.K_LEFT]:
@@ -104,7 +107,7 @@ class Tank(pygame.sprite.Sprite):
                 if self.can_shoot():
                     self.create_bullet()
         
-        if self.PLAYER_ID == 2:
+        if self.PLAYER_ID == 1:
             if keys[pygame.K_d]:
                     self.angle -= 6
             if keys[pygame.K_a]:
