@@ -55,6 +55,7 @@ class Game():
             self.tank_group.draw(self.screen)
 
             pygame.draw.rect(self.screen, (0, 0, 0), (*self.tank.rect.topleft, *self.tank.image.get_size()), 1)
+
             pygame.display.flip()
             
     def new_map(self):

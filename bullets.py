@@ -21,39 +21,41 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.position)
         self.direction = direction
 
-        self.bullet_speed = 6
+        self.bullet_speed = 5
         self.lifetime = 8000 # milliseconds
         self.spawn_time = pygame.time.get_ticks()
         
         self.walls = wall_group
+        self.frame = 0
 
     def update(self):
         """
-        Move the bullet
+        Move the bullet.
+        Move in x direction first, check collision, then do y.
+        e.g. see https://www.youtube.com/watch?v=vAfveKX1pSc
+        and https://www.reddit.com/r/pygame/comments/7bxo9r/checking_which_side_a_sprite_collides_with_another/
         """
+        self.position_before_collision = self.position.copy()
+        self.positionx_before_collision = self.position_before_collision.x
+        self.positiony_before_collision = self.position_before_collision.y
+
+        self.position += self.direction * self.bullet_speed
+
+        # Do x
+        self.rect.centerx = self.position.x
         if pygame.sprite.spritecollide(self, self.walls, False):
-            if self.direction.y > 0 and self.direction.x == 0:
-                self.direction *= -1
-            elif self.direction.y < 0 and self.direction.x == 0:
-                self.direction *= -1
-            elif self.direction.x > 0 and self.direction.y == 0:
-                self.direction *= -1
-            elif self.direction.x < 0 and self.direction.y == 0:
-                self.direction *= -1
-            elif self.direction.x > 0 and self.direction.y < 0:
-                self.direction.x = -self.direction.x
-            elif self.direction.x < 0 and self.direction.y < 0:
-                self.direction.y = -self.direction.y
-            elif self.direction.x < 0 and self.direction.y > 0:
-                self.direction.x = -self.direction.x
-            elif self.direction.x > 0 and self.direction.y > 0:
-                self.direction.y = -self.direction.y
-            self.position += self.direction * self.bullet_speed
-
-        else:
-            self.position += self.direction * self.bullet_speed
-        self.rect.center = self.position
-
+            self.direction.x *= -1
+            self.position = self.position_before_collision
+            self.rect.center = self.position
+        
+        # Do y
+        self.rect.centery = self.position.y
+        if pygame.sprite.spritecollide(self, self.walls, False):
+            self.direction.y *= -1
+            print(self.direction)
+            self.position = self.position_before_collision
+            self.rect.center = self.position
+            
         if pygame.time.get_ticks() - self.spawn_time >= self.lifetime:
             self.kill()
 
