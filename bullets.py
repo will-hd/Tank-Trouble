@@ -62,7 +62,7 @@ class Bullet(pygame.sprite.Sprite):
         # Check if bullet collides with any tanks
         # Allow delay time so that bullet can leave the tank's rect.
         # Then check if rects collide before mask for better efficiency
-        if current_time - self.spawn_time >= 200:
+        if current_time - self.spawn_time >= 180:
             if pygame.sprite.spritecollide(self, self.game.tank_group, False, pygame.sprite.collide_rect):
                 if pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_mask):
                     self.kill() # Kill bullet as well as tank
