@@ -56,7 +56,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.centery = self.position.y
         if pygame.sprite.spritecollide(self, self.game.wall_group, False):
             self.direction.y *= -1
-            print(self.direction)
             self.position = self.position_before_collision
             self.rect.center = self.position
 

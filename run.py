@@ -28,13 +28,15 @@ class Game():
         
         self.create_map()
 
-        self.tanks = [Tank(game=self, PLAYER_ID=0), Tank(game=self, PLAYER_ID=1)]
+        self.tanks = [Tank(game=self, PLAYER_ID=0, INIT_POSITION=self.TANK_INIT_POSITIONS[0]), 
+                        Tank(game=self, PLAYER_ID=1, INIT_POSITION=self.TANK_INIT_POSITIONS[1])]
         # self.tank1 = Tank(game=self, PLAYER_ID=0)
         # self.tank2 = Tank(game=self, PLAYER_ID=1)
         self.tanks_score = [0, 0]
         self.tanks_alive = [True, True]
 
         self.setup_score_display()
+
 
     def reset(self):
         pygame.time.delay(1000)
@@ -44,7 +46,7 @@ class Game():
             if not tank.IS_ALIVE:
                 self.tank_group.add(tank)
                 tank.IS_ALIVE = True
-            tank.position = pygame.math.Vector2(constants.TANK_INIT_POSITIONS[tank.PLAYER_ID])
+            tank.position = pygame.math.Vector2(self.TANK_INIT_POSITIONS[tank.PLAYER_ID])
 
     def run(self):
         # Game loop
@@ -78,10 +80,8 @@ class Game():
             self.tanks_alive = [tank.IS_ALIVE for tank in self.tanks]
 
             if False in self.tanks_alive:
-                print("someone died!!")
                 dscore = [int(x == True) for x in self.tanks_alive]
                 self.tanks_score = [sum(pair) for pair in zip(self.tanks_score, dscore)]
-                print(self.tanks_score)
                 self.reset()
 
             # for tank in self.tank_group:
@@ -117,11 +117,15 @@ class Game():
 
 
     def create_map(self):
+        self.TANK_INIT_POSITIONS = []
         for row, tiles in enumerate(wall.wall_map):
             for col, tile in enumerate(tiles):
                 if tile == 1:
                     wall.Wall(self.wall_group, col, row)
-    
+                if tile == 2:
+                    self.TANK_INIT_POSITIONS.append((col*constants.BLOCKSIZE, row*constants.BLOCKSIZE))
+
+
     def end_screen(self):
         END_RUNNING = True
 

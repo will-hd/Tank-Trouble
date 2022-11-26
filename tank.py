@@ -6,13 +6,13 @@ import constants
 vector = pygame.math.Vector2
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, game, PLAYER_ID) -> None:
+    def __init__(self, game, PLAYER_ID, INIT_POSITION) -> None:
         self.game = game
         self.PLAYER_ID = PLAYER_ID
         super().__init__(self.game.tank_group)
         self.tanks_bullet_group = pygame.sprite.Group()
         
-        self.position = vector(constants.TANK_INIT_POSITIONS[self.PLAYER_ID])
+        self.position = vector(INIT_POSITION)
 
         self.init_image()
 
