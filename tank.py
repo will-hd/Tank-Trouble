@@ -21,7 +21,7 @@ class Tank(pygame.sprite.Sprite):
         self.direction = vector(1, 0)
         self.rotation_offset = 0
 
-        self.tank_speed = 4
+        self.tank_speed = 100
         self.shoot_frequency: int = 300 #/milliseconds
         self.bullet_ready: bool = True
         self.max_bullets = 5
@@ -91,7 +91,7 @@ class Tank(pygame.sprite.Sprite):
         return rotated_image, new_rect, new_mask
 
     def control(self, forward):
-        self.dpos += self.direction * self.tank_speed * forward
+        self.dpos += self.direction * self.tank_speed * forward * self.game.dt
 
     def handle_key_press(self, keys):
 

@@ -50,7 +50,7 @@ class Game():
         GAME_RUNNING = True
 
         while GAME_RUNNING:
-            self.clock.tick(30)
+            self.dt = self.clock.tick(60) / 1000 # Using dt method makes speed FPS invariant
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -67,6 +67,7 @@ class Game():
             self.all_bullet_group.update()
             self.all_bullet_group.draw(self.screen)
 
+
             self.tank_group.update(keys)
             self.tank_group.draw(self.screen)
             
@@ -81,11 +82,11 @@ class Game():
                 print(self.tanks_score)
                 self.reset()
 
-            for tank in self.tank_group:
-                pygame.draw.rect(self.screen, (0, 0, 0), (*tank.rect.topleft, *tank.image.get_size()), 1)
+            # for tank in self.tank_group:
+            #     pygame.draw.rect(self.screen, (0, 0, 0), (*tank.rect.topleft, *tank.image.get_size()), 1)
             
-            for bullet in self.all_bullet_group:
-                pygame.draw.rect(self.screen, (0, 0, 0), (*bullet.rect.topleft, *bullet.image.get_size()), 1)
+            # for bullet in self.all_bullet_group:
+            #     pygame.draw.rect(self.screen, (0, 0, 0), (*bullet.rect.topleft, *bullet.image.get_size()), 1)
 
             pygame.display.flip()
         

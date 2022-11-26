@@ -12,18 +12,20 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__(self.game.all_bullet_group, tanks_bullet_group)
 
         # Surface, image, rect
-        self.image = pygame.Surface([8, 8])
-        self.image.fill((0, 0, 0))
-        self.image.set_colorkey((0, 0, 0))
+        self.image = pygame.Surface([8, 8], pygame.SRCALPHA)
+        # self.image.fill((0, 0, 0))
+        # self.image.set_colorkey((0, 0, 0))
+        # pygame.draw.rect(self.image, (0,0,0), (0, 0, 25, 6))
         pygame.draw.circle(self.image, constants.BULLET_COLOR, (4, 4), radius=4)
+        self.mask = pygame.mask.from_surface(self.image)
 
         self.direction = direction
         self.position = position.copy() + self.direction*6 # Bullet spawned closer to end of barrel
         self.rect = self.image.get_rect(center=self.position)
         
 
-        self.bullet_speed = 7
-        self.lifetime = 8000 # milliseconds
+        self.bullet_speed = 170
+        self.lifetime = 80000 # milliseconds
         self.spawn_time = pygame.time.get_ticks()
         
         self.frame = 0
@@ -35,12 +37,13 @@ class Bullet(pygame.sprite.Sprite):
         e.g. see https://www.youtube.com/watch?v=vAfveKX1pSc
         and https://www.reddit.com/r/pygame/comments/7bxo9r/checking_which_side_a_sprite_collides_with_another/
         """
+
         # Store previous state before collision, to reuse if next move causes collison
         self.position_before_collision = self.position.copy()
         self.positionx_before_collision = self.position_before_collision.x
         self.positiony_before_collision = self.position_before_collision.y
 
-        self.position += self.direction * self.bullet_speed
+        self.position += self.direction * self.bullet_speed * self.game.dt
 
         # Check if new movement has caused collision along x
         self.rect.centerx = self.position.x
@@ -56,6 +59,7 @@ class Bullet(pygame.sprite.Sprite):
             print(self.direction)
             self.position = self.position_before_collision
             self.rect.center = self.position
+
         
         current_time = pygame.time.get_ticks()
 
