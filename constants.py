@@ -19,3 +19,7 @@ MOVEMENT_KEYS = {
     1: {'CLOCKWISE': pygame.K_d, 'ANTI-CLOCKWISE': pygame.K_a, 
         'FORWARD': pygame.K_w, 'BACKWARD': pygame.K_s, 'SHOOT': pygame.K_f}
         }
+
+TANK_INIT_POSITIONS = [
+    (DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2 +100), (600, 100)
+]

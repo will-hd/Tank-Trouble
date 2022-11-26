@@ -11,11 +11,9 @@ class Tank(pygame.sprite.Sprite):
         self.PLAYER_ID = PLAYER_ID
         super().__init__(self.game.tank_group)
         self.tanks_bullet_group = pygame.sprite.Group()
+        
+        self.position = vector(constants.TANK_INIT_POSITIONS[self.PLAYER_ID])
 
-        if self.PLAYER_ID == 0:
-            self.position = vector(constants.DISPLAY_WIDTH/2, constants.DISPLAY_HEIGHT/2 +100)
-        else:
-            self.position = vector(600, 100)
         self.init_image()
 
         self.dpos = vector(0, 0)
@@ -63,7 +61,7 @@ class Tank(pygame.sprite.Sprite):
         self.handle_key_press(keys)
 
         self.direction = vector(1, 0).rotate(-self.angle)
-        self.image, self.rect, self.mask = self.rotate_image()
+        self.image, self.rect, self.mask = self.rotate_image() #
 
         # Update position
         self.position += self.dpos # floating point accuracy
