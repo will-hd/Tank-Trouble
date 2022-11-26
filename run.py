@@ -4,6 +4,7 @@ from tank import Tank
 from bullets import Bullet
 import constants
 import wall
+import random
 
 # Initialise pygame 
 pygame.init()
@@ -41,12 +42,14 @@ class Game():
     def reset(self):
         pygame.time.delay(1000)
         self.all_bullet_group.empty()
+        starting_pos = random.sample(self.TANK_INIT_POSITIONS, 2)
         for tank in self.tanks:
             tank.tanks_bullet_group.empty()
             if not tank.IS_ALIVE:
                 self.tank_group.add(tank)
                 tank.IS_ALIVE = True
-            tank.position = pygame.math.Vector2(self.TANK_INIT_POSITIONS[tank.PLAYER_ID])
+            
+            tank.position = pygame.math.Vector2(starting_pos[tank.PLAYER_ID])
 
     def run(self):
         # Game loop
