@@ -20,12 +20,12 @@ class Bullet(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
 
         self.direction = direction
-        self.position = position.copy() + self.direction*6 # Bullet spawned closer to end of barrel
+        self.position = position.copy() + self.direction*20 # Bullet spawned closer to end of barrel
         self.rect = self.image.get_rect(center=self.position)
         
 
-        self.bullet_speed = 170
-        self.lifetime = 80000 # milliseconds
+        self.bullet_speed = 190
+        self.lifetime = 8000 # milliseconds
         self.spawn_time = pygame.time.get_ticks()
         
         self.frame = 0
@@ -66,10 +66,11 @@ class Bullet(pygame.sprite.Sprite):
         # Check if bullet collides with any tanks
         # Allow delay time so that bullet can leave the tank's rect.
         # Then check if rects collide before mask for better efficiency
-        if current_time - self.spawn_time >= 180:
+        if current_time - self.spawn_time >= 50:
             if pygame.sprite.spritecollide(self, self.game.tank_group, False, pygame.sprite.collide_rect):
                 # Now check if bullet collides with tank's mask
                 tank_hit_list = pygame.sprite.spritecollide(self, self.game.tank_group, True, pygame.sprite.collide_mask)
+                # maybe add offset so that bullet has to overlap slightly?
                 
                 if tank_hit_list:
                     self.kill() # Kill bullet as well as tank

@@ -38,6 +38,7 @@ class Game():
 
     def reset(self):
         pygame.time.delay(3000)
+        self.all_bullet_group.empty()
         for tank in self.tanks:
             if not tank.IS_ALIVE:
                 self.tank_group.add(tank)

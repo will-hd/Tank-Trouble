@@ -22,6 +22,7 @@ class Tank(pygame.sprite.Sprite):
         self.rotation_offset = 0
 
         self.tank_speed = 100
+        self.tank_rot_speed = 200
         self.shoot_frequency: int = 300 #/milliseconds
         self.bullet_ready: bool = True
         self.max_bullets = 5
@@ -96,9 +97,9 @@ class Tank(pygame.sprite.Sprite):
     def handle_key_press(self, keys):
 
         if keys[constants.MOVEMENT_KEYS[self.PLAYER_ID]['CLOCKWISE']]:
-                self.angle -= 6
+                self.angle -= self.tank_rot_speed * self.game.dt
         if keys[constants.MOVEMENT_KEYS[self.PLAYER_ID]['ANTI-CLOCKWISE']]:
-                self.angle += 6
+                self.angle += self.tank_rot_speed * self.game.dt
         if keys[constants.MOVEMENT_KEYS[self.PLAYER_ID]['FORWARD']]:
                 self.control(forward=+1)
         if keys[constants.MOVEMENT_KEYS[self.PLAYER_ID]['BACKWARD']]:
