@@ -23,32 +23,40 @@ class Game():
         self.backdrop.fill(constants.WHITE)
         self.backdrop_box = self.screen.get_rect()
 
+        # Sprite groups
         self.tank_group = pygame.sprite.Group()
         self.wall_group = pygame.sprite.Group()
         self.all_bullet_group = pygame.sprite.Group()
         
         self.create_map()
+        self.create_tanks()
+        self.create_score_display()
 
-        self.tanks = [Tank(game=self, PLAYER_ID=0, INIT_POSITION=self.TANK_INIT_POSITIONS[0]), 
-                        Tank(game=self, PLAYER_ID=1, INIT_POSITION=self.TANK_INIT_POSITIONS[1])]
-        # self.tank1 = Tank(game=self, PLAYER_ID=0)
-        # self.tank2 = Tank(game=self, PLAYER_ID=1)
+    def create_tanks(self):
+        self.tanks = [
+            Tank(game=self, PLAYER_ID=0, 
+            init_position=self.TANK_INIT_POSITIONS[0], init_angle=random.randrange(0, 360)), 
+            Tank(game=self, PLAYER_ID=1, 
+            init_position=self.TANK_INIT_POSITIONS[1], init_angle=random.randrange(0, 360))
+            ]
         self.tanks_score = [0, 0]
         self.tanks_alive = [True, True]
 
-        self.setup_score_display()
-
-
     def reset(self):
+        """
+        Removes all bullets, sets all tanks alive and gives them a new starting
+        position from the list of possible starting positions for the map.
+        """
         pygame.time.delay(1000)
+
         self.all_bullet_group.empty()
         starting_pos = random.sample(self.TANK_INIT_POSITIONS, 2)
+
         for tank in self.tanks:
             tank.tanks_bullet_group.empty()
             if not tank.IS_ALIVE:
                 self.tank_group.add(tank)
                 tank.IS_ALIVE = True
-            
             tank.position = pygame.math.Vector2(starting_pos[tank.PLAYER_ID])
 
     def run(self):
@@ -87,6 +95,7 @@ class Game():
                 self.tanks_score = [sum(pair) for pair in zip(self.tanks_score, dscore)]
                 self.reset()
 
+            ###### Uncomment if wanting to see rect "hitboxes" ######
             # for tank in self.tank_group:
             #     pygame.draw.rect(self.screen, (0, 0, 0), (*tank.rect.topleft, *tank.image.get_size()), 1)
             
@@ -94,30 +103,27 @@ class Game():
             #     pygame.draw.rect(self.screen, (0, 0, 0), (*bullet.rect.topleft, *bullet.image.get_size()), 1)
 
             pygame.display.flip()
+
+    def create_score_display(self):
+        """
+        Creates tank drawings for use in scoreboard.
+        """
+        self.scoreboard_tank1 = pygame.Surface([30, 40], pygame.SRCALPHA)
+        pygame.draw.rect(self.scoreboard_tank1, constants.TANK_COLORS[0][0], (0, 10, 30, 30))
+        pygame.draw.rect(self.scoreboard_tank1, constants.TANK_COLORS[0][1], (10, 10, 10, 20))
+        pygame.draw.rect(self.scoreboard_tank1, constants.TANK_COLORS[0][2], (12, 0, 6, 25))
+        self.scoreboard_tank2 = pygame.Surface([30, 40], pygame.SRCALPHA)
+        pygame.draw.rect(self.scoreboard_tank2, constants.TANK_COLORS[1][0], (0, 10, 30, 30))
+        pygame.draw.rect(self.scoreboard_tank2, constants.TANK_COLORS[1][1], (10, 10, 10, 20))
+        pygame.draw.rect(self.scoreboard_tank2, constants.TANK_COLORS[1][2], (12, 0, 6, 25))
         
-
-    def setup_score_display(self):
-        self.score_tank1 = pygame.Surface([30, 40], pygame.SRCALPHA)
-        pygame.draw.rect(self.score_tank1, constants.TANK_COLORS[0][0], (0, 10, 30, 30))
-        pygame.draw.rect(self.score_tank1, constants.TANK_COLORS[0][1], (10, 10, 10, 20))
-        pygame.draw.rect(self.score_tank1, constants.TANK_COLORS[0][2], (12, 0, 6, 25))
-        
-
-        self.score_tank2 = pygame.Surface([30, 40], pygame.SRCALPHA)
-        pygame.draw.rect(self.score_tank2, constants.TANK_COLORS[1][0], (0, 10, 30, 30))
-        pygame.draw.rect(self.score_tank2, constants.TANK_COLORS[1][1], (10, 10, 10, 20))
-        pygame.draw.rect(self.score_tank2, constants.TANK_COLORS[1][2], (12, 0, 6, 25))
-        
-
-
     def display_score(self):
         score1 = font.render(f"{self.tanks_score[0]}", 1, constants.BLACK)
         score2 = font.render(f"{self.tanks_score[1]}", 1, constants.BLACK)
         self.screen.blit(score1, (240, 825))
         self.screen.blit(score2, (540, 825))
-        self.screen.blit(self.score_tank1, (200, 820))
-        self.screen.blit(self.score_tank2, (500, 820))
-
+        self.screen.blit(self.scoreboard_tank1, (200, 820))
+        self.screen.blit(self.scoreboard_tank2, (500, 820))
 
     def create_map(self):
         self.TANK_INIT_POSITIONS = []
@@ -127,7 +133,6 @@ class Game():
                     wall.Wall(self.wall_group, col, row)
                 if tile == 2:
                     self.TANK_INIT_POSITIONS.append((col*constants.BLOCKSIZE, row*constants.BLOCKSIZE))
-
 
     def end_screen(self):
         END_RUNNING = True

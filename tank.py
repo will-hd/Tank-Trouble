@@ -6,18 +6,18 @@ import constants
 vector = pygame.math.Vector2
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, game, PLAYER_ID, INIT_POSITION) -> None:
+    def __init__(self, game, PLAYER_ID, init_position, init_angle) -> None:
         self.game = game
         self.PLAYER_ID = PLAYER_ID
         super().__init__(self.game.tank_group)
         self.tanks_bullet_group = pygame.sprite.Group()
         
-        self.position = vector(INIT_POSITION)
+        self.position = vector(init_position)
 
         self.init_image()
 
         self.dpos = vector(0, 0)
-        self.angle = 0
+        self.angle = init_angle
         self.direction = vector(1, 0)
         self.rotation_offset = 0
 
