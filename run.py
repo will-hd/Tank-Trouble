@@ -37,9 +37,10 @@ class Game():
         self.setup_score_display()
 
     def reset(self):
-        pygame.time.delay(3000)
+        pygame.time.delay(1000)
         self.all_bullet_group.empty()
         for tank in self.tanks:
+            tank.tanks_bullet_group.empty()
             if not tank.IS_ALIVE:
                 self.tank_group.add(tank)
                 tank.IS_ALIVE = True

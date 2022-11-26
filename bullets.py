@@ -24,7 +24,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.position)
         
 
-        self.bullet_speed = 190
+        self.bullet_speed = 200
         self.lifetime = 8000 # milliseconds
         self.spawn_time = pygame.time.get_ticks()
         
