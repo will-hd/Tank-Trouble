@@ -60,10 +60,10 @@ class Game():
             tank.position = pygame.math.Vector2(starting_pos[tank.PLAYER_ID])
 
     def run(self):
-        # Game loop
-        
+        """
+        Game loop
+        """
         GAME_RUNNING = True
-
         while GAME_RUNNING:
             self.dt = self.clock.tick(60) / 1000 # Using dt method makes speed FPS invariant
 
@@ -72,24 +72,19 @@ class Game():
                     GAME_RUNNING = False
 
             keys = pygame.key.get_pressed()
-            
 
             # Draw screen and grid
             self.screen.blit(self.backdrop, self.backdrop_box)
             self.wall_group.draw(self.screen)
 
-            
             self.all_bullet_group.update()
             self.all_bullet_group.draw(self.screen)
-
-
             self.tank_group.update(keys)
             self.tank_group.draw(self.screen)
             
             self.display_score()
 
             self.tanks_alive = [tank.IS_ALIVE for tank in self.tanks]
-
             if False in self.tanks_alive:
                 dscore = [int(x == True) for x in self.tanks_alive]
                 self.tanks_score = [sum(pair) for pair in zip(self.tanks_score, dscore)]
